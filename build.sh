@@ -6,7 +6,7 @@ as --32 src/boot.s -o bin/boot.o
 # compile kernel.c file
 gcc -m32 -c src/kernel/kernel.c  -o bin/kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
 
-# linking all the object files to TicTacToe.bin
+# linking all the object files to OS.bin
 ld -m elf_i386 -T linker.ld bin/boot.o bin/kernel.o  -o bin/OS.bin -nostdlib
 
 # check OS.bin file is x86 multiboot file or not
