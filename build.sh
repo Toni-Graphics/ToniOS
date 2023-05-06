@@ -1,10 +1,30 @@
 #!/bin/bash
 
-nasm -f elf src/kernel/graphics.asm -o bin/graphics.o
-nasm src/boot.asm -f elf -o bin/b.o
+mkdir bin
 
-g++ -m16 src/kernel/boot.cpp bin/graphics.o  -ffreestanding -o bin/c.o
+# assemble boot.s file
+as --32 src/boot.s -o bin/boot.o
 
-ld -T NUL  -o bin/image.tmp -Ttext 0x0 bin/c.o bin/b.o
+# compile kernel.c file
+gcc -m32 -c src/kernel/kernel.c  -o bin/kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
 
-objcopy -O binary -j .text bin/image.tmp bin/image.bin
+# linking all the object files to OS.bin
+ld -m elf_i386 -T linker.ld bin/boot.o bin/kernel.o  -o bin/OS.bin -nostdlib
+
+# check OS.bin file is x86 multiboot file or not
+grub-file --is-x86-multiboot bin/OS.bin
+
+# building the iso file
+mkdir -p isodir/boot/grub
+cp bin/OS.bin isodir/boot/OS.bin
+cp grub.cfg isodir/boot/grub/grub.cfg
+grub-mkrescue -o iso/ToniOS.iso isodir
+
+#cleaning
+rm bin/*.o
+rm bin/*.bin
+rmdir bin
+rm -r isodir
+
+# run it in qemu
+qemu-system-x86_64 -cdrom iso/ToniOS.iso
