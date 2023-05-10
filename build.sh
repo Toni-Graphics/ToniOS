@@ -6,10 +6,14 @@ mkdir bin
 as --32 src/boot.s -o bin/boot.o
 
 # compile kernel.c file
-gcc -m32 -c src/kernel/kernel.c  -o bin/kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+gcc -m32 -c src/kernel/kernel.c  -Isrc/ -Isrc/lib/ -o bin/kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
 
 # linking all the object files to OS.bin
+<<<<<<< HEAD
 ld -m elf_i386 -T linker.ld bin/boot.o bin/kernel.o  -o bin/OS.bin -nostdlib
+=======
+ld -m elf_i386 -T linker.ld bin/boot.o bin/kernel.o  -o bin/OS.bin -nostdlib 
+>>>>>>> 5e1f3e6 (Keyboard)
 
 # check OS.bin file is x86 multiboot file or not
 grub-file --is-x86-multiboot bin/OS.bin
