@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+const char g_HexChars[] = "0123456789abcdef";
+
 void printf_unsigned(unsigned long long number, int radix)
 {
     char buffer[32];

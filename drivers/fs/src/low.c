@@ -2,9 +2,6 @@
 #include <drivers/io.h>
 #include <fs_low.h>
 #include <stdint.h>
- 
-#define BLOCK_SIZE 512
-#define FS_PORT    0x100
 
 void readBlock(int blockNumber, char* buffer) {
     for (int i = 0; i < BLOCK_SIZE / 2; i++) {

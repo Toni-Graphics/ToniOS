@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <io.h>
+#include <string.h>
 
 #ifndef _VGA_H
 #define _VGA_H
@@ -10,8 +11,6 @@
 #define MAX_ROWS 40
 #define MAX_COLS 80
 
-uint16_t linePosition = 0;
-uint16_t line = 0;
 
 #define VGA_CTRL_REGISTER 0x3d4
 #define VGA_DATA_REGISTER 0x3d5

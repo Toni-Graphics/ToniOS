@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <vga.h>
 #include <keys.h>
+#include <key.h>
+
+bool CAPSLOCK = false;
+bool SHIFT = false;
 
 uint8_t keyscan() {
     unsigned char brk;
@@ -16,9 +20,6 @@ uint8_t keyscan() {
     else
         return 0;
 }
-
-bool CAPSLOCK = false;
-bool SHIFT = false;
 
 char* read_input(const size_t LEN) {
     char input[LEN];
@@ -42,7 +43,7 @@ char* read_input(const size_t LEN) {
             // Backspace key
             if (i > 0) {
                 i--;
-                printBack();
+                printf("\b \b");
             }
         } else if (char_str == "LEFT_SHIFT" || char_str == "RIGHT_SHIFT") {
             SHIFT = true;

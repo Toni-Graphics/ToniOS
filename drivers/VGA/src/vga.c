@@ -3,6 +3,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <drivers/io.h>
+#include <string.h>
+
+uint16_t linePosition = 0;
+uint16_t line = 0;
+
 
 void set_cursor(int offset) {
     offset /= 2;

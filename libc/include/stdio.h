@@ -2,6 +2,8 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
+#include <vga.h>
+
 #ifndef _STDIO_H
 #define _STDIO_H
 
@@ -16,8 +18,6 @@
 #define PRINTF_LENGTH_SHORT         2
 #define PRINTF_LENGTH_LONG          3
 #define PRINTF_LENGTH_LONG_LONG     4
-
-const char g_HexChars[] = "0123456789abcdef";
 
 void printf_unsigned(unsigned long long number, int radix);
 void printf_signed(long long number, int radix);
