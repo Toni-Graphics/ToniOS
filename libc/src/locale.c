@@ -1,80 +1,16 @@
-#include <locale.h>
+#include "locale.h"
 
 #include <stdlib.h>
 
-struct lconv *locale;
+local *locale;
 
 char *setlocale(int type, const char *name) {
-    if (type == LC_ALL) {
-        if (name == "C") {
-            
-        }
-        else if (name == "") {
-
-        }
-        else if (name == NULL) {
-
-        }
-    }
-    else if (type == LC_COLLATE) {
-        if (name == "C") {
-
-        }
-        else if (name == "") {
-
-        }
-        else if (name == NULL) {
-
-        }
-    }
-    else if (type == LC_CTYPE) {
-        if (name == "C") {
-
-        }
-        else if (name == "") {
-
-        }
-        else if (name == NULL) {
-
-        }
-    }
-    else if (type == LC_MONETARY) {
-        if (name == "C") {
-
-        }
-        else if (name == "") {
-
-        }
-        else if (name == NULL) {
-
-        }
-    }
-    else if (type == LC_NUMERIC) {
-        if (name == "C") {
-
-        }
-        else if (name == "") {
-
-        }
-        else if (name == NULL) {
-
-        }
-    }
-    else if (type == LC_TIME) {
-        if (name == "C") {
-
-        }
-        else if (name == "") {
-
-        }
-        else if (name == NULL) {
-
-        }
-    }
-    else 
-        return -1;
+    if (type == LC_LANG)
+        locale->lang = name;
+    else if (type == LC_keyL)
+        locale->keyL = name;
 }
 
-struct lconv *localeconv( void ) {
+struct local *localeconv( void ) {
     return locale;
 }

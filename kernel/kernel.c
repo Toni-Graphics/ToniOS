@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <vga.h>
 #include <key.h>
 
 void kmain() {

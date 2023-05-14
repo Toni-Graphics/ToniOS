@@ -21,8 +21,11 @@ uint8_t keyscan() {
         return 0;
 }
 
+char* in = "";
+
 char* read_input(const size_t LEN) {
-    char* r;
+    memset(in, 0, strlen(in));
+    
     int i = 0;
 
     while (true) {
@@ -37,13 +40,14 @@ char* read_input(const size_t LEN) {
 
         if (char_str == "ENTER") {
             // Enter key
-            strstr(r, "\n");
+            strcat(in, "\0");
             break;
         } else if (char_str == "BACKSPACE" || char_str == "DEL") {
             // Backspace key
             if (i > 0) {
                 i--;
-                printf("\b \b");
+                printBack();
+                in[strlen(in)-1] = ' ';
             }
         } else if (char_str == "LEFT_SHIFT" || char_str == "RIGHT_SHIFT") {
             SHIFT = true;
@@ -53,8 +57,7 @@ char* read_input(const size_t LEN) {
          else if (scancode >= 0 && scancode < 256) {
             // Regular key
             if (char_str != "ERROR") {
-                strstr(r, char_str);
-                r++;
+                strcat(in, char_str);
                 i++;
                 printf(char_str);
                 SHIFT = false;
@@ -66,5 +69,5 @@ char* read_input(const size_t LEN) {
         }
     }
 
-    return r;
+    return in;
 }

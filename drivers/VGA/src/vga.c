@@ -103,3 +103,9 @@ void setColor(uint16_t color) {
 uint16_t getColor() {
     return defaultColor;
 }
+
+void printBack() {
+    putChar('\b', defaultColor);
+    putChar(' ', defaultColor);
+    putChar('\b', defaultColor);
+}
