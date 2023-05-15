@@ -56,7 +56,7 @@ $(OBJDIR)/fs_low.o: drivers/fs/src/low.c
 	$(CC) -c $<  -o $@ $(CFLAGS)
 
 $(OBJDIR)/graphics.o: drivers/VGA/src/graphics.asm
-	nasm $< -f elf32 -o $@ 
+	$(AS) $< $(ASFLAGS) -o $@ 
 
 $(OBJDIR)/math.o: libc/src/math.c
 	$(CC) -c $<   -o $@ $(CFLAGS)
@@ -64,6 +64,8 @@ $(OBJDIR)/math.o: libc/src/math.c
 $(OBJDIR)/locale.o: libc/src/locale.c
 	$(CC) -c $<   -o $@ $(CFLAGS)
 
+$(OBJDIR)/x86.o: libc/x86/x86.asm
+	$(AS) -c $<  $(ASFLAGS) -o $@ 
 
 $(TARGET): $(BINDIR)/OS.bin
 	@mkdir -p $(ISODIR)/boot/grub
