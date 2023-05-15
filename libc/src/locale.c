@@ -1,8 +1,8 @@
-#include "locale.h"
+#include <locale.h>
 
 #include <stdlib.h>
 
-local *locale;
+struct local *locale;
 
 char *setlocale(int type, const char *name) {
     if (type == LC_LANG)

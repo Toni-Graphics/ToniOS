@@ -8,8 +8,8 @@ CFLAGS = -m32 -Ilibc/include/ -Idrivers/Vga/include/ -Idrivers/ -I. -Idrivers/fs
 VM = qemu-system-x86_64
 VM_FLAGS = -cdrom
 
-AS = as
-ASFLAGS = --32 #-f elf32
+AS = nasm
+ASFLAGS = -f elf32 #--32 
 LD = ld
 LDFLAGS = -m elf_i386 -T linker.ld  -nostdlib 
 
@@ -25,10 +25,10 @@ all: run
 # Notice how dependencies are built as needed
 $(BINDIR)/OS.bin: $(OBJDIR)/boot.o $(OBJDIR)/kernel.o $(OBJDIR)/stdio.o  $(OBJDIR)/stdlib.o   $(OBJDIR)/string.o $(OBJDIR)/io.o	    \
 				  $(OBJDIR)/key.o  $(OBJDIR)/vga.o    $(OBJDIR)/fs_low.o $(OBJDIR)/graphics.o $(OBJDIR)/math.o   $(OBJDIR)/locale.o \
-				  | create_directories
+				  $(OBJDIR)/x86.o | create_directories
 	$(LD) $(LDFLAGS) $^ -o $@
 
-$(OBJDIR)/boot.o: kernel/boot/boot.s | create_directories
+$(OBJDIR)/boot.o: kernel/boot/boot.asm | create_directories
 	$(AS) $(ASFLAGS) $< -o $@
 
 $(OBJDIR)/kernel.o: kernel/kernel.c
@@ -64,13 +64,14 @@ $(OBJDIR)/math.o: libc/src/math.c
 $(OBJDIR)/locale.o: libc/src/locale.c
 	$(CC) -c $<   -o $@ $(CFLAGS)
 
+
 $(TARGET): $(BINDIR)/OS.bin
 	@mkdir -p $(ISODIR)/boot/grub
 	@cp $< $(ISODIR)/boot/OS.bin
 	@cp grub.cfg $(ISODIR)/boot/grub/grub.cfg
 	@grub-mkrescue -o $@ isodir
 
-run: $(TARGET) | clean
+run: $(TARGET)
 	@$(VM) $(VM_FLAGS) $<
 
 create_directories:

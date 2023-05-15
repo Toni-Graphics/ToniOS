@@ -8,6 +8,7 @@ _set_pixel_asm:
   push bp
   mov bp, sp
 
+
   ; Save registers that will be modified
   ; Note: Depending on the calling convention, the compiler expects certain registers
   ; to remain intact after a function was called, make sure to keep that in mind, otherwise you’ll most likely get weird behavior
