@@ -2,6 +2,8 @@
 This Operating System is a minimalistic hobby os make by me and the help of artifacts.
 The os has at the moment a keyboard driver (whit one issuse) and the needed functions to print something out on the display.
 
+    - by running it prints out error: not assignet.
+
 #### Install Depencis
 You can easily install all depencys just run following command:
 

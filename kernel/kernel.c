@@ -1,15 +1,19 @@
 #include <stdio.h>
-#include <vga.h>
-#include <key.h>
 #include <multiboot.h>
+#include <isr/include/isr.h>
+#include <x86/x86.h>
 
 
 void kmain(multiboot_info_t* mbi) {
     cls();
 
-    printf("ToniOS v0.0.3\n");
 
-    printf("drives_length 0x%x", mbi->drives_length);
+    printf("[INFO] installing ISR\n");
+    isr_install();
 
-    for (;;);
+    printf("[INFO] installed ISR");
+
+    sti();
+
+    asm volatile("int $0x13");
 }
