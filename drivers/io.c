@@ -21,6 +21,21 @@ void outw(uint16_t port, uint16_t data) {
     asm("out %%ax, %%dx" : : "a" (data), "d" (port));
 }
 
+void outsw(unsigned short port, const unsigned short *source, unsigned int count) {
+    asm volatile("cld\n\t"
+                 "rep outsw"
+                 : "+S" (source), "+c" (count)
+                 : "d" (port));
+}
+
+void insw(unsigned short port, unsigned short *destination, unsigned int count) {
+    asm volatile("cld\n\t"
+                 "rep insw"
+                 : "+D" (destination), "+c" (count)
+                 : "d" (port)
+                 : "memory");
+}
+
 void memcpy(char *source, char *dest, int nbytes) {
     int i;
     for (i = 0; i < nbytes; i++) {

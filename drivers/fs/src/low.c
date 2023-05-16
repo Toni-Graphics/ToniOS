@@ -1,30 +1,61 @@
 #include <stdio.h>
 #include <drivers/io.h>
-#include <fs_low.h>
+#include <fs/fs_low.h>
 #include <stdint.h>
 
-void readBlock(int blockNumber, char* buffer) {
-    unsigned int blockAddress = blockNumber * BLOCK_SIZE;
+void readBlock(int blockNumber, char *buffer) {
+    unsigned int lba = blockNumber * (BLOCK_SIZE / 2);
 
-    // Read block data from the port in 16-bit chunks
-    for (int i = 0; i < BLOCK_SIZE / 2; i++) {
-        unsigned int address = blockAddress + (i * 2);
-        outw(FS_PORT, address);  // Send the address to the controller
-        unsigned short data = inw(FS_PORT);  // Read the block data
-        buffer[i * 2] = (char)(data & 0xFF);
-        buffer[i * 2 + 1] = (char)((data >> 8) & 0xFF);
-    }
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x80) != 0);
+
+    outb(0xE0 | ((lba >> 24) & 0xF), STATUS_COMMAND_REGISTER); 
+    outb(lba & 0xFF, STATUS_COMMAND_REGISTER + 1); 
+    outb((lba >> 8) & 0xFF, STATUS_COMMAND_REGISTER + 2); 
+    outb((lba >> 16) & 0xFF, STATUS_COMMAND_REGISTER + 3); 
+    outb(0x20, STATUS_COMMAND_REGISTER + 4);
+
+
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x40) == 0);
+
+    insw(DATA_REGISTER, buffer, BLOCK_SIZE / 2);
 }
 
-void writeBlock(int blockNumber, const char* data) {
-    unsigned int blockAddress = blockNumber * BLOCK_SIZE;
+void writeBlock(int blockNumber, const char *buffer) {
+    unsigned int lba = blockNumber * (BLOCK_SIZE / 2);
 
-    // Write block data to the port in 16-bit chunks
-    for (int i = 0; i < BLOCK_SIZE / 2; i++) {
-        unsigned int address = blockAddress + (i * 2);
-        outw(FS_PORT, address);  // Send the address to the controller
-        unsigned short blockData = (unsigned short)(data[i * 2] & 0xFF) | ((unsigned short)(data[i * 2 + 1] & 0xFF) << 8);
-        outw(FS_PORT, blockData);  // Write the block data
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x80) != 0);
+
+    outb(0xE0 | ((lba >> 24) & 0xF), STATUS_COMMAND_REGISTER); 
+    outb(lba & 0xFF, STATUS_COMMAND_REGISTER + 1);
+    outb((lba >> 8) & 0xFF, STATUS_COMMAND_REGISTER + 2);
+    outb((lba >> 16) & 0xFF, STATUS_COMMAND_REGISTER + 3);
+    outb(0x30, STATUS_COMMAND_REGISTER + 4); 
+
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x8) == 0);
+
+    outsw(DATA_REGISTER, buffer, BLOCK_SIZE / 2);
+}
+
+void fs_init() {
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x40) != 0x40);
+
+    outb(CMD_IDENTIFY_DRIVE, STATUS_COMMAND_REGISTER);
+
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x40) != 0x40);
+
+    uint8_t status = inb(STATUS_COMMAND_REGISTER);
+    if (status & 0x01) {
+        printf("Fehler beim Lesen der Festplattenidentifikation!\n");
+        return;
     }
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x40) != 0x40);
 
+    outb(CMD_SET_FEATURES, STATUS_COMMAND_REGISTER);
+    outb(0x03, ERROR_FEATURE_REGISTER);
+
+    //while ((inb(STATUS_COMMAND_REGISTER) & 0x40) != 0x40);
+
+    outb(CMD_SET_FEATURES, STATUS_COMMAND_REGISTER);
+    outb(0x200 >> 8, ERROR_FEATURE_REGISTER);
+    outb(0x200 & 0xFF, ERROR_FEATURE_REGISTER);
 }

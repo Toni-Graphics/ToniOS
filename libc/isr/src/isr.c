@@ -19,7 +19,7 @@ void isr_install() {
 }
 
 void isr_handler(int i_nr){
-    printf("Interrupt number: %x\n", i_nr);
+    printf("Interrupt number: 0x%x\n", i_nr);
 }
 
 void register_isr(int interrupt_number, void (*handler)())

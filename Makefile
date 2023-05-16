@@ -3,7 +3,7 @@
 # $^ = all dependencies
 
 CC = gcc
-CFLAGS = -m32 -Ilibc/include/ -Idrivers/Vga/include/ -Idrivers/ -I. -Ilibc/ -Idrivers/fs/include -Idrivers/Key/include -std=gnu99 -ffreestanding -O1 #-Waddress  -Wall  -Wextra
+CFLAGS = -m32 -Ilibc/include/ -Idrivers/Vga/include/ -Idrivers/ -I. -Ilibc/ -Idrivers/fs/include -Idrivers/Key/include -std=gnu99 -ffreestanding -O0 #-Waddress  -Wall  -Wextra
 
 VM = qemu-system-x86_64
 VM_FLAGS = -cdrom
