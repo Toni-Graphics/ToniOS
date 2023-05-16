@@ -1,15 +1,11 @@
-#include <isr/include/isr.h>
+#include <isr/isr.h>
 #include <x86/x86.h>
-#include <isr/include/idt.h>
+#include <isr/idt.h>
 #include <stdint.h>
 
 struct idt_entry idt[256];
 
 void isr_install() {
-    for (int i=0; i < 256;i++) {
-        register_isr(i, isr_handler);
-    }
-
     struct {
         unsigned short limit;
         void* base;
@@ -23,7 +19,7 @@ void isr_install() {
 }
 
 void isr_handler(int i_nr){
-    printf("Interrupt number: %d\n", i_nr);
+    printf("Interrupt number: %x\n", i_nr);
 }
 
 void register_isr(int interrupt_number, void (*handler)())

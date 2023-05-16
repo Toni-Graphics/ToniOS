@@ -25,7 +25,7 @@ all: run
 # Notice how dependencies are built as needed
 $(BINDIR)/OS.bin: $(OBJDIR)/boot.o     $(OBJDIR)/kernel.o $(OBJDIR)/stdio.o  $(OBJDIR)/stdlib.o   $(OBJDIR)/string.o $(OBJDIR)/io.o	    \
 				  $(OBJDIR)/key.o      $(OBJDIR)/vga.o    $(OBJDIR)/fs_low.o $(OBJDIR)/graphics.o $(OBJDIR)/math.o   $(OBJDIR)/locale.o \
-				  $(OBJDIR)/x86_asm.o  $(OBJDIR)/x86.o    $(OBJDIR)/isr.o  | create_directories
+				  $(OBJDIR)/x86_asm.o  $(OBJDIR)/x86.o    $(OBJDIR)/isr.o    $(OBJDIR)/gdt.o      | create_directories
 	$(LD) $(LDFLAGS) $^ -o $@
 
 $(OBJDIR)/boot.o: kernel/boot/boot.asm | create_directories
@@ -71,6 +71,9 @@ $(OBJDIR)/x86.o: libc/x86/x86.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(OBJDIR)/isr.o: libc/isr/src/isr.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJDIR)/gdt.o: libc/gdt/gdt.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(BINDIR)/OS.bin
