@@ -23,9 +23,10 @@ OBJDIR = obj
 all: run
 
 # Notice how dependencies are built as needed
-$(BINDIR)/OS.bin: $(OBJDIR)/boot.o     $(OBJDIR)/kernel.o $(OBJDIR)/stdio.o  $(OBJDIR)/stdlib.o   $(OBJDIR)/string.o $(OBJDIR)/io.o	    \
-				  $(OBJDIR)/key.o      $(OBJDIR)/vga.o    $(OBJDIR)/fs_low.o $(OBJDIR)/graphics.o $(OBJDIR)/math.o   $(OBJDIR)/locale.o \
-				  $(OBJDIR)/x86_asm.o  $(OBJDIR)/x86.o    $(OBJDIR)/isr.o    $(OBJDIR)/gdt.o      $(OBJDIR)/syscall.o | create_directories
+$(BINDIR)/OS.bin: $(OBJDIR)/boot.o     $(OBJDIR)/kernel.o $(OBJDIR)/stdio.o  $(OBJDIR)/stdlib.o   $(OBJDIR)/string.o  $(OBJDIR)/io.o	    \
+				  $(OBJDIR)/key.o      $(OBJDIR)/vga.o    $(OBJDIR)/fs_low.o $(OBJDIR)/graphics.o $(OBJDIR)/math.o    $(OBJDIR)/locale.o    \
+				  $(OBJDIR)/x86_asm.o  $(OBJDIR)/x86.o    $(OBJDIR)/isr.o    $(OBJDIR)/gdt.o      $(OBJDIR)/syscall.o $(OBJDIR)/register.o  \
+				  $(OBJDIR)/timer.o    $(OBJDIR)/sys.o    | create_directories
 	$(LD) $(LDFLAGS) $^ -o $@
 
 $(OBJDIR)/boot.o: kernel/boot/boot.asm | create_directories
@@ -77,6 +78,15 @@ $(OBJDIR)/gdt.o: libc/gdt/gdt.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(OBJDIR)/syscall.o: libc/syscall/src/syscall.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJDIR)/register.o: libc/register/reg.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJDIR)/timer.o: libc/timer/timer.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJDIR)/sys.o: libc/src/sys.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(BINDIR)/OS.bin

@@ -26,7 +26,7 @@ void register_isr(int interrupt_number, void (*handler)())
 {
     uint32_t handler_address = (uint32_t)handler;
     idt[interrupt_number].offset_low = handler_address & 0xFFFF;
-    idt[interrupt_number].selector = 0x08; // GDT code segment selector
+    idt[interrupt_number].selector = 0x8; // GDT code segment selector
     idt[interrupt_number].zero = 0;
     idt[interrupt_number].type_attr = 0x8E; // 32-bit interrupt gate
     idt[interrupt_number].offset_high = (handler_address >> 16) & 0xFFFF;

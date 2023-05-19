@@ -2,6 +2,8 @@
     "files.associations": {
         "stdio.h": "c",
         "isr.h": "c",
-        "multiboot.h": "c"
+        "multiboot.h": "c",
+        "syscall.h": "c",
+        "sys.h": "c"
     }
 }

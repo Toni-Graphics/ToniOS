@@ -12,7 +12,5 @@ void outw(uint16_t port, uint16_t data);
 void outsw(unsigned short port, const unsigned short *source, unsigned int count);
 void insw(unsigned short port, unsigned short *destination, unsigned int count);
 
-void wait_for_io(uint32_t timer_count);
-void sleep(uint32_t timer_count);
 
 #endif

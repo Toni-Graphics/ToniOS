@@ -44,3 +44,7 @@ unsigned long long __umoddi3(unsigned long long num, unsigned long long den) {
     
     return num;
 }
+
+void system(char* str) {
+    //Handle the str
+}

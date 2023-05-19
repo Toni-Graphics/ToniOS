@@ -6,5 +6,6 @@
 unsigned long long __udivdi3(unsigned long long num, unsigned long long den); 
 unsigned long long __umoddi3(unsigned long long num, unsigned long long den);
 
+void system(char* str);
 
 #endif

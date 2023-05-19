@@ -18,3 +18,8 @@ Than the iso image is in the iso/ folder and Qemu (a virtuall machine) starts.
 When you want to create your own operating system with the basis of this operating system, you must know the folder structure and what file what does.
 All folders are so created that the name say something.
 As example, in the libc folder are the c libarys. In there are two subfolders. The in the include subfolder are the header files and in the src subfolder are the .c and .cpp files.
+
+### Dev
+
+need to implement libc/register/reg.c now there´s a placeholder
+in libc/timer/timer.c sleep doesn´t work
