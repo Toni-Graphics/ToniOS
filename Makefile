@@ -3,7 +3,7 @@
 # $^ = all dependencies
 
 CC = gcc
-CFLAGS = -m32 -Ilibc/include/ -Idrivers/Vga/include/ -Idrivers/ -I. -Ilibc/ -Idrivers/fs/include -Idrivers/Key/include -std=gnu99 -ffreestanding -O0 #-Waddress  -Wall  -Wextra
+CFLAGS = -m32 -Ilibc/include/ -Idrivers/Vga/include/ -Idrivers/ -I. -Ilibc/ -Idrivers/fs/include -Idrivers/Key/include -std=gnu99  -ffreestanding -O0  -Waddress  -Wall  -Wextra
 
 VM = qemu-system-x86_64
 VM_FLAGS = -cdrom
@@ -20,13 +20,13 @@ BINDIR = bin
 OBJDIR = obj
 
 # First rule is the one executed when no parameters are fed to the Makefile
-all: run
+all: build
 
 # Notice how dependencies are built as needed
 $(BINDIR)/OS.bin: $(OBJDIR)/boot.o     $(OBJDIR)/kernel.o $(OBJDIR)/stdio.o  $(OBJDIR)/stdlib.o   $(OBJDIR)/string.o  $(OBJDIR)/io.o	    \
 				  $(OBJDIR)/key.o      $(OBJDIR)/vga.o    $(OBJDIR)/fs_low.o $(OBJDIR)/graphics.o $(OBJDIR)/math.o    $(OBJDIR)/locale.o    \
 				  $(OBJDIR)/x86_asm.o  $(OBJDIR)/x86.o    $(OBJDIR)/isr.o    $(OBJDIR)/gdt.o      $(OBJDIR)/syscall.o $(OBJDIR)/register.o  \
-				  $(OBJDIR)/timer.o    $(OBJDIR)/sys.o    | create_directories
+				  $(OBJDIR)/timer.o    $(OBJDIR)/sys.o    $(OBJDIR)/pci.o    | create_directories
 	$(LD) $(LDFLAGS) $^ -o $@
 
 $(OBJDIR)/boot.o: kernel/boot/boot.asm | create_directories
@@ -78,7 +78,7 @@ $(OBJDIR)/gdt.o: libc/gdt/gdt.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(OBJDIR)/syscall.o: libc/syscall/src/syscall.c
-	$(CC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $@ $(CFLAGS) -mno-80387
 
 $(OBJDIR)/register.o: libc/register/reg.c
 	$(CC) -c $< -o $@ $(CFLAGS)
@@ -89,11 +89,17 @@ $(OBJDIR)/timer.o: libc/timer/timer.c
 $(OBJDIR)/sys.o: libc/src/sys.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
+$(OBJDIR)/pci.o: drivers/pci/pci.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
 $(TARGET): $(BINDIR)/OS.bin
 	@mkdir -p $(ISODIR)/boot/grub
 	@cp $< $(ISODIR)/boot/OS.bin
 	@cp grub.cfg $(ISODIR)/boot/grub/grub.cfg
 	@grub-mkrescue -o $@ isodir
+
+build: $(TARGET)
+	@echo ''
 
 run: $(TARGET)
 	@$(VM) $(VM_FLAGS) $<
