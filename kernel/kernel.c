@@ -4,20 +4,11 @@ void kmain(multiboot_info_t* mbi) {
     ata_init();
     cls();
 
-    FILE f = open(0, "abc");
-    
-    char* str = "Hi, thats here is a test str.\n";
+    DIR dir = mkdir("test", "/");
 
-    printf("Content to write: %s\n", str);
-
-    printf("Writing ...\n");
-
-    write(f, str);
-
-    printf("Reading ...\n");
-
-    char* buf;
-    read(f, &buf);
-
-    printf("Readed value: %s\n", buf);
+    DIR_ENTRY* entrys = getFiles(&dir);
+    for (size_t i=0; i < (sizeof(entrys) / sizeof(DIR_ENTRY)); i++) {
+        DIR_ENTRY entry = entrys[i];
+        printf("Name %s, startBlock nr 0x%x, type: %d\n", entry.name, entry.startBlockNr, entry.type);
+    }
 }

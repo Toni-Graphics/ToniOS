@@ -3,9 +3,53 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "dir.h"
 
 int getLba(char *path) {
-    return 100;
+
+    if (path == "/") {
+        return LBA_FS_SUPER;
+    }
+
+    else {  //Normal path
+        int lba = LBA_FS_SUPER;
+
+        char* subDir;
+        char ch;
+        DIR acDir;
+        acDir.lba = lba;
+        DIR_ENTRY* entrys = getFiles(&acDir);
+
+        for (size_t i=0; i < strlen(path); i++) {
+            ch = path[i];
+            if (ch == '/') { //new dir
+                for (size_t x=0; x < ( sizeof(entrys) / sizeof(DIR_ENTRY) ); x++) {
+                    DIR_ENTRY entry = entrys[x];
+                    if (entry.name == subDir) {
+                        acDir.lba = entry.startBlockNr;
+                    }
+                }
+                entrys = getFiles(&acDir);
+                memset(subDir, 0, sizeof(subDir));
+            }
+            else {
+                char newStr[sizeof(subDir)+1];
+                strcpy(newStr, subDir);
+                newStr[sizeof(subDir)] = ch;
+            }   
+        }
+
+        //subDir is now the filename
+        size_t fileIndex = -1;
+
+        for (size_t i=0; i < ( sizeof(entrys) / sizeof(DIR_ENTRY) ); i++) {
+            if (entrys[i].name ==  subDir)  {
+                fileIndex = i;
+                break;
+            }
+        }   
+    }
+    return 0;
 }
 
 int disk_nr=0;

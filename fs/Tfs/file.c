@@ -1,12 +1,12 @@
 #include "file.h"
 #include "lba.h"
 
-FILE open(const int DRIVE, char* path) {
+FILE open(char* path) {
     FILE ret;
 
     ret.path = path;
     ret.lba = getLba(path);
-    ret.drive = DRIVE;
+    ret.drive = 0;
 
     return ret;
 }

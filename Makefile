@@ -98,7 +98,7 @@ $(OBJDIR)/tfs_lba.o: fs/Tfs/lba.c
 $(OBJDIR)/tfs_file.o: fs/Tfs/file.c 
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-$(OBJDIR)/tfs_dir.o; fs/Tfs/dir.c
+$(OBJDIR)/tfs_dir.o: fs/Tfs/dir.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(BINDIR)/OS.bin

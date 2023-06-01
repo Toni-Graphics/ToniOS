@@ -13,6 +13,7 @@
 #include <drivers/ata/ata.h>
 #include <drivers/PCI/pci.h>
 #include <fs/Tfs/file.h>
+#include <fs/Tfs/dir.h>
 #include <string.h>
 
 #endif

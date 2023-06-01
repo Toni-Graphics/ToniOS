@@ -17,7 +17,7 @@ typedef struct {
     char content[ATA_SECTOR_SIZE - sizeof(uint32_t)];
 } _raw_file;
 
-FILE open(const int DRIVE, char* path);
+FILE open(char* path);
 
 int write(FILE handler, char* buffer);
 int read(FILE handler, char** buffer);
